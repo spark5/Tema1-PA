@@ -1,0 +1,74 @@
+/*Oncioiu Anamaria Raluca
+**Grupa: 323CA
+**Tema1
+*/
+
+
+  **Mod de implementare
+	
+  Pentru a calcula distanta de editare intre un cuvant din dictionar si un 
+cuvant oarecare, am folosit distanta Levenshtein. Acest algoritm calculeaza 
+distantele intre toate prefixele din ambele cuvinte si le salveaza intr-o 
+matrice. 
+
+  Dupa ce am scos toate spatiile din sirul initial, am construit o matrice 
+superioara in care am retinut toate posibilitatile de a insera spatii.
+
+	Apoi, am luat pe rand fiecare cuvant si l-am comparat cu fiecare cuvant din 
+dictionar: i-am calculat distanta Levenshtein, daca distanta era aceeasi, am 
+actualizat matricea doar cu cuvantul cu frecventa maxima. La frecvente egale, am
+pastrat cuvantul minim lexical.
+
+	Am retinut toate distantele din functia Levenshtein si m-am folosit doar de
+ultima linie, fiindca pentru ultimul cuvant de pe o linie oarecare din matricea 
+de cuvinte posibile, restul cuvintelor de pe aceeasi linie sunt prefixele lui. 
+Deci, are rost sa aplic Levenshtein doar pentru ultimul cuvant din fiecare linie. 
+	
+	Dupa ce am actualizat matricea cu cele mai bune cuvinte, am facut corectia 
+sirului initial printr-o abordare bottom-up [programare dinamica]. La fiecare
+pas, am luat in considerare criteriile de corectare [distanta de editare minima,
+frecventa maxima, cat mai putine cuvinte si corectie minim lexicala] pentru: 
+- cuvantul curent: def[i][j].spelling.word
+- cele doua cuvinte care il compun: def[i][k].spelling.word si 
+def[k + 1][j].spelling word
+
+	Exp.: Intre "cutedog" si cuvintele "cute", "dog". Aceste cuvinte formeaza o 
+submatrice superioara in matricea mare. 
+
+	Solutia problemei se afla in coltul din dreapta sus al matricei de cuvinte.
+	
+	
+  **Structuri de date utilizate
+	
+  Mi-am definit doua tipuri de structuri:
+	
+a) pentru dictionar - struct cuvant: contine campul word si un camp unsigned int 
+pentru frecventa
+
+b) pentru corectia sirului de la intrare - struct definition: contine un camp de 
+tip structura pentru dictionar si un camp pentru distanta Levenshtein  
+
+
+	**Optimizari pentru a intra in timp
+	
+	Am alocat totul static.
+	Intotdeauna am retinut intr-o variabila lungimea cuvantului curent.
+	Am compilat cu -O3, pentru a scoate timpi mai mici, cu toate ca sursa intra in
+timp.	
+
+
+  **Complexitatea algoritmilor
+	
+  Functia Levenshtein are O(n^2). Main-ul are O(n^3).
+  
+  
+  **Observatii
+	
+  Primeam warning-uri de la compilarea cu -O3 pentru fgets() si fscanf(),
+deoarece nu retineam valoarea intoarsa de aceste functii. Din acest motiv, am 
+scris: 
+
+- strcpy(sir, fgets(sir, SIZE, stdin))
+- int bytes = fscanf(...) 
+  
+  
